@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\DokumenPengajuan;
+use App\Models\Pengajuan;
 use App\Models\RiwayatPengajuan;
 use Illuminate\Http\Request;
 
@@ -21,6 +22,16 @@ class DokumenController extends Controller
             $dokumen->catatan = $request->catatan;
         }
         $dokumen->save();
+
+        // Auto-recalculate submission status
+        $pengajuan = Pengajuan::with('dokumen')->findOrFail($dokumen->pengajuan_id);
+        $perluPerbaikanCount = $pengajuan->dokumen->where('status', 'Perlu perbaikan')->count();
+
+        if ($perluPerbaikanCount > 0) {
+            $pengajuan->status = 'Perlu perbaikan';
+            $pengajuan->catatan_status = "Terdapat {$perluPerbaikanCount} dokumen yang memerlukan perbaikan sebelum proses dapat dilanjutkan ke penjadwalan survey.";
+            $pengajuan->save();
+        }
 
         RiwayatPengajuan::create([
             'pengajuan_id' => $dokumen->pengajuan_id,

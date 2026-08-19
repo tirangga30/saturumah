@@ -22,6 +22,7 @@ Route::middleware(['auth'])->group(function () {
 
     // Pengajuan Routes
     Route::get('/pengajuan/{id}', [PengajuanController::class, 'show'])->name('pengajuan.show');
+    Route::post('/pengajuan/{id}/auto-verifikasi', [PengajuanController::class, 'autoVerifikasi'])->name('pengajuan.auto_verifikasi');
     Route::post('/pengajuan/{id}/status', [PengajuanController::class, 'updateStatus'])->name('pengajuan.update_status');
 
     // Dokumen Routes

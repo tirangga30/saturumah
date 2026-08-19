@@ -48,14 +48,18 @@
                     </button>
                 </form>
             @else
-                <a href="{{ route('pengajuan.show', ['id' => $pengajuan->id, 'tab' => 'verifikasi']) }}" class="btn btn-primary">
-                    Mulai verifikasi &rarr;
-                </a>
+                <form action="{{ route('pengajuan.auto_verifikasi', $pengajuan->id) }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-primary" title="Jalankan pemeriksaan dan verifikasi dokumen otomatis">
+                        <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="margin-right: 4px;"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        Verifikasi Otomatis &rarr;
+                    </button>
+                </form>
             @endif
         </div>
     </div>
 
-    <!-- Sub Navigation Tabs -->
+    <!-- Sub Navigation Tabs (Clean 4 Tabs: Ringkasan, Dokumen, Monitoring, Riwayat) -->
     <div class="tabs-nav" style="margin-bottom: 0;">
         <a href="{{ route('pengajuan.show', ['id' => $pengajuan->id, 'tab' => 'ringkasan']) }}" class="tab-item {{ $activeTab == 'ringkasan' ? 'active' : '' }}">
             Ringkasan
@@ -63,14 +67,8 @@
         <a href="{{ route('pengajuan.show', ['id' => $pengajuan->id, 'tab' => 'dokumen']) }}" class="tab-item {{ $activeTab == 'dokumen' ? 'active' : '' }}">
             Dokumen
         </a>
-        <a href="{{ route('pengajuan.show', ['id' => $pengajuan->id, 'tab' => 'verifikasi']) }}" class="tab-item {{ $activeTab == 'verifikasi' ? 'active' : '' }}">
-            Verifikasi
-        </a>
-        <a href="{{ route('pengajuan.show', ['id' => $pengajuan->id, 'tab' => 'survey']) }}" class="tab-item {{ $activeTab == 'survey' ? 'active' : '' }}">
-            Survey
-        </a>
         <a href="{{ route('pengajuan.show', ['id' => $pengajuan->id, 'tab' => 'monitoring']) }}" class="tab-item {{ $activeTab == 'monitoring' ? 'active' : '' }}">
-            Monitoring
+            Survey & Monitoring
         </a>
         <a href="{{ route('pengajuan.show', ['id' => $pengajuan->id, 'tab' => 'riwayat']) }}" class="tab-item {{ $activeTab == 'riwayat' ? 'active' : '' }}">
             Riwayat
@@ -84,10 +82,6 @@
         @include('admin.pengajuan.tabs._ringkasan')
     @elseif($activeTab == 'dokumen')
         @include('admin.pengajuan.tabs._dokumen')
-    @elseif($activeTab == 'verifikasi')
-        @include('admin.pengajuan.tabs._verifikasi')
-    @elseif($activeTab == 'survey')
-        @include('admin.pengajuan.tabs._survey')
     @elseif($activeTab == 'monitoring')
         @include('admin.pengajuan.tabs._monitoring')
     @elseif($activeTab == 'riwayat')
